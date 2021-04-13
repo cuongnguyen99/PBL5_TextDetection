@@ -90,8 +90,6 @@ def drawRectangle(img,biggest,thickness):
 def camPreview(previewName, camID):
     cv2.namedWindow(previewName)
     cam = cv2.VideoCapture(camID)
-    cam.set(cv2.CAP_PROP_FRAME_WIDTH, widthImg)
-    cam.set(cv2.CAP_PROP_FRAME_HEIGHT, heightImg)
     if cam.isOpened():  # try to get the first frame
         success, img = cam.read()
         # imgContour = img.copy()
