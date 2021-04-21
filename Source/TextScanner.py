@@ -3,9 +3,8 @@ import threading
 import numpy as np
 
 # ===========================================
-widthImg = 640
-heightImg = 480
-
+# widthImg  = 960
+# heightImg = 540
 
 # ===========================================
 class camThread(threading.Thread):
@@ -66,12 +65,14 @@ def reorder(myPoints):
 
 def getWrap(img, biggest):
     biggest = reorder(biggest)
+    h, w, c = img.shape
+
     point1 = np.float32(biggest)
-    point2 = np.float32([[0, 0], [widthImg, 0], [0, heightImg], [widthImg, heightImg]])
+    point2 = np.float32([[0, 0], [w, 0], [0, h], [w, h]])
     matrix = cv2.getPerspectiveTransform(point1, point2)
-    imgOutput = cv2.warpPerspective(img, matrix, (widthImg, heightImg))
-    imgCrop = imgOutput[20:imgOutput.shape[0] - 20, 20:imgOutput.shape[1] - 20]
-    imgCrop = cv2.resize(imgCrop, (widthImg, heightImg))
+    imgOutput = cv2.warpPerspective(img, matrix, (w, h))
+    # imgCrop = imgOutput[20:imgOutput.shape[0] - 20, 20:imgOutput.shape[1] - 20]
+    imgCrop = cv2.resize(imgOutput, (w//2, h))
     return imgCrop
 
 ####################DrawReactangle############################
@@ -88,30 +89,20 @@ def drawRectangle(img, biggest, thickness):
 def camPreview(previewName, camID):
     cv2.namedWindow(previewName)
     cam = cv2.VideoCapture(camID)
-    # cam.set(cv2.CAP_PROP_FRAME_WIDTH, widthImg)
-    # cam.set(cv2.CAP_PROP_FRAME_HEIGHT, heightImg)
     if cam.isOpened():  # try to get the first frame
         success, img = cam.read()
-        # imgContour = img.copy()
         imgThres = camProcessing(img)
-        biggest = getContours(imgThres, img)
+        # biggest = getContours(imgThres, img)
     else:
         success = False
 
     while success:
         cv2.imshow(previewName, imgThres)
         success, img = cam.read()
-        img = cv2.resize(img, (widthImg, heightImg))
+        # img = cv2.resize(img, (widthImg, heightImg))
         imgContour = img.copy()
         imgThres = camProcessing(imgContour)
         biggest = getContours(imgThres, imgContour)
-
-        # print("================")
-        # print(biggest)
-        # if biggest.size != 0:
-        #     print(biggest)
-        #     cv2.imshow("Picture", img)
-        # print("================")
 
         cv2.imshow(previewName, imgContour)
         key = cv2.waitKey(20)
@@ -128,8 +119,5 @@ def camPreview(previewName, camID):
 
 
 ############## RUN PROGRAM #####################
-thread1 = camThread("Camera", 1)
-# thread2 = camThread("Camera 2", 2)
-
+thread1 = camThread("Camera", 0)
 thread1.start()
-# thread2.start()
