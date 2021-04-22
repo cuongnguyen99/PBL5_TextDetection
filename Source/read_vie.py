@@ -6,7 +6,7 @@ import re
 
 #############################Version 2#########################
 # img = cv2.imread("D:\\Save\\viet2.png")
-img = cv2.imread("D:\\Save\\Project\\viet10.png")
+img = cv2.imread("filename1.jpg")
 rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 text = pytesseract.image_to_string(rgb, lang="vie")
 

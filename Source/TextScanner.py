@@ -1,6 +1,7 @@
 import cv2
 import threading
 import numpy as np
+import math
 
 # ===========================================
 # widthImg  = 960
@@ -65,7 +66,24 @@ def reorder(myPoints):
 
 def getWrap(img, biggest):
     biggest = reorder(biggest)
-    h, w, c = img.shape
+    #h, w, c = img.shape
+
+    h1=int(math.sqrt((biggest[0][0][0]-biggest[1][0][0])**2 + (biggest[0][0][1]-biggest[1][0][1])**2))
+    h2=int(math.sqrt((biggest[2][0][0]-biggest[3][0][0])**2 + (biggest[2][0][1]-biggest[3][0][1])**2))
+    h=max([h1,h2])
+    print("h")
+    print(h)
+    print("h1")
+    print(h1)
+    print("h2")
+    print(h2)
+    
+    w1=int(math.sqrt((biggest[0][0][0]-biggest[3][0][0])**2 + (biggest[0][0][1]-biggest[3][0][1])**2))
+    w2=int(math.sqrt((biggest[1][0][0]-biggest[2][0][0])**2 + (biggest[1][0][1]-biggest[2][0][1])**2))
+    w=max([w1,w2])
+    print("w")
+    print(w)
+    
 
     point1 = np.float32(biggest)
     point2 = np.float32([[0, 0], [w, 0], [0, h], [w, h]])
@@ -78,12 +96,19 @@ def getWrap(img, biggest):
 ####################DrawReactangle############################
 
 def drawRectangle(img, biggest, thickness):
-    cv2.line(img, (biggest[0][0][0], biggest[0][0][1]), (biggest[1][0][0], biggest[1][0][1]), (0, 255, 0), thickness)
-    cv2.line(img, (biggest[1][0][0], biggest[1][0][1]), (biggest[2][0][0], biggest[2][0][1]), (0, 255, 0), thickness)
-    cv2.line(img, (biggest[2][0][0], biggest[2][0][1]), (biggest[3][0][0], biggest[3][0][1]), (0, 255, 0), thickness)
+    #[0][0][0], [0][0][1]  :A
+    #[1][0][0], [1][0][1]  :D
+    #[2][0][0], [2][0][1]  :C
+    #[3][0][0], [3][0][1]  :B
+    cv2.line(img, (biggest[0][0][0], biggest[0][0][1]), (biggest[1][0][0], biggest[1][0][1]), (0, 255, 0), thickness) 
+    cv2.line(img, (biggest[1][0][0], biggest[1][0][1]), (biggest[2][0][0], biggest[2][0][1]), (0, 255, 0), thickness) 
+    cv2.line(img, (biggest[2][0][0], biggest[2][0][1]), (biggest[3][0][0], biggest[3][0][1]), (0, 255, 0), thickness) 
     cv2.line(img, (biggest[3][0][0], biggest[3][0][1]), (biggest[0][0][0], biggest[0][0][1]), (0, 255, 0), thickness)
     # return img
-
+    
+    
+    
+    
 
 ################################################
 def camPreview(previewName, camID):
@@ -98,7 +123,7 @@ def camPreview(previewName, camID):
 
     while success:
         cv2.imshow(previewName, imgThres)
-        success, img = cam.read()
+        success, img = cam.read() 
         # img = cv2.resize(img, (widthImg, heightImg))
         imgContour = img.copy()
         imgThres = camProcessing(imgContour)
@@ -106,13 +131,28 @@ def camPreview(previewName, camID):
 
         cv2.imshow(previewName, imgContour)
         key = cv2.waitKey(20)
-        if key == ord("q"):
-            if biggest.size != 0:
-                imgWraped = getWrap(img, biggest)
-                cv2.imshow("Picture", imgWraped)
-            else:
+        if biggest.size != 0:
+            print(biggest)
+            print("000")
+            print(biggest[0][0][0])
+            print("100")
+            print(biggest[1][0][0])
+            print("200")
+            print(biggest[2][0][0])
+            print("300")
+            print(biggest[3][0][0])
+            print("---------------")
+            imgWraped = getWrap(img, biggest)
+            cv2.imshow("Picture", imgWraped)
+            cv2.imwrite("filename1.jpg",imgWraped) 
+        #if key == ord("q"):
+         #   if biggest.size != 0:
+          #      imgWraped = getWrap(img, biggest)
+           #     cv2.imshow("Picture", imgWraped)
+            #    cv2.imwrite("filename1.jpg",imgWraped) 
+            #else:
                 # cv2.imshow("Picture", img)
-                pass
+             #   pass
         if key == 27:  # exit on ESC
             break
     cv2.destroyWindow(previewName)
