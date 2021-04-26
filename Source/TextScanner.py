@@ -2,6 +2,7 @@ import cv2
 import threading
 import numpy as np
 import math
+import read_vie
 
 # ===========================================
 # widthImg  = 960
@@ -90,7 +91,7 @@ def getWrap(img, biggest):
     matrix = cv2.getPerspectiveTransform(point1, point2)
     imgOutput = cv2.warpPerspective(img, matrix, (w, h))
     # imgCrop = imgOutput[20:imgOutput.shape[0] - 20, 20:imgOutput.shape[1] - 20]
-    imgCrop = cv2.resize(imgOutput, (w//2, h))
+    imgCrop = cv2.resize(imgOutput, (w, h))
     return imgCrop
 
 ####################DrawReactangle############################
@@ -131,28 +132,25 @@ def camPreview(previewName, camID):
 
         cv2.imshow(previewName, imgContour)
         key = cv2.waitKey(20)
-        if biggest.size != 0:
-            print(biggest)
-            print("000")
-            print(biggest[0][0][0])
-            print("100")
-            print(biggest[1][0][0])
-            print("200")
-            print(biggest[2][0][0])
-            print("300")
-            print(biggest[3][0][0])
-            print("---------------")
-            imgWraped = getWrap(img, biggest)
-            cv2.imshow("Picture", imgWraped)
-            cv2.imwrite("filename1.jpg",imgWraped) 
+        #if biggest.size != 0:
+            #imgWraped = getWrap(img, biggest)
+            #cv2.imshow("Picture", imgWraped)
+            #cv2.imwrite("filename1.jpg",imgWraped) 
         #if key == ord("q"):
-         #   if biggest.size != 0:
-          #      imgWraped = getWrap(img, biggest)
-           #     cv2.imshow("Picture", imgWraped)
-            #    cv2.imwrite("filename1.jpg",imgWraped) 
+            #if biggest.size != 0:
+                #imgWraped = getWrap(img, biggest)
+                
+                #cv2.imshow("Picture", imgThres)
+                #cv2.imwrite("filename1.jpg", imgThres) 
             #else:
-                # cv2.imshow("Picture", img)
-             #   pass
+                #pass
+        if key == ord("q"):
+            if biggest.size != 0:
+                imgWraped = getWrap(img, biggest)
+                
+                cv2.imshow("Picture", imgWraped)
+                cv2.imwrite("filename1.jpg", imgWraped)
+            else : pass 
         if key == 27:  # exit on ESC
             break
     cv2.destroyWindow(previewName)
@@ -161,3 +159,4 @@ def camPreview(previewName, camID):
 ############## RUN PROGRAM #####################
 thread1 = camThread("Camera", 0)
 thread1.start()
+
