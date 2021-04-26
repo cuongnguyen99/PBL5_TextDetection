@@ -2,7 +2,6 @@
 from PIL import Image
 import pytesseract
 import cv2
-import re
 
 #############################Version 2#########################
 # img = cv2.imread("D:\\Save\\viet2.png")
@@ -21,6 +20,8 @@ text = text.strip()
 ###########################################
 
 print(text)
-cv2.imshow("image",rgb)
-cv2.waitKey(0)
+
+# cv2.imshow("image",rgb)
+# cv2.waitKey(0)
+
 
