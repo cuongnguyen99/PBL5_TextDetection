@@ -87,7 +87,7 @@ def drawRectangle(img, biggest, thickness):
 ################################################
 def camPreview(previewName, camID):
     cv2.namedWindow(previewName)
-    cam = cv2.VideoCapture(camID)
+    cam = cv2.VideoCapture(camID, cv2.CAP_DSHOW)
     # cam.set(cv2.CAP_PROP_FRAME_WIDTH, widthImg)
     # cam.set(cv2.CAP_PROP_FRAME_HEIGHT, heightImg)
     if cam.isOpened():  # try to get the first frame
@@ -128,7 +128,7 @@ def camPreview(previewName, camID):
 
 
 ############## RUN PROGRAM #####################
-thread1 = camThread("Camera", 1)
+thread1 = camThread("Camera", 0)
 # thread2 = camThread("Camera 2", 2)
 
 thread1.start()
