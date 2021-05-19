@@ -144,13 +144,13 @@ def camPreview(previewName, camID):
                 #cv2.imwrite("filename1.jpg", imgThres) 
             #else:
                 #pass
-        if key == ord("q"):
-            if biggest.size != 0:
-                imgWraped = getWrap(img, biggest)
-                
-                cv2.imshow("Picture", imgWraped)
-                cv2.imwrite("filename1.jpg", imgWraped)
-            else : pass 
+        
+        if biggest.size != 0:
+            imgWraped = getWrap(img, biggest)
+            
+            cv2.imshow("Picture", imgWraped)
+            cv2.imwrite("filename1.jpg", imgWraped)
+        else : pass 
         if key == 27:  # exit on ESC
             break
     cv2.destroyWindow(previewName)
