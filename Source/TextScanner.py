@@ -265,8 +265,8 @@ def camPreview(previewName, camID):
             # Lần đầu phát hiện vật cản thì tiến hành chụp ảnh
             if vatcan == 1:
                 cv2.imshow("Picture", imgContour)       #show ảnh chưa qua xử lý
-                imgWraped = getWrap(img, biggest)       #imgWraped -> ảnh sau khi cắt
-                cv2.imwrite("filename1.jpg", imgWraped) #lưu ảnh sau khi cắt
+                # imgWraped = getWrap(img, biggest)       #imgWraped -> ảnh sau khi cắt
+                cv2.imwrite("filename1.jpg", imgContour) #lưu ảnh sau khi cắt
 
                 #Đọc chữ trên ảnh đã lưu
 
