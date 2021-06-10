@@ -147,10 +147,11 @@ def camPreview(previewName, camID):
                 
         #Nếu phát hiện có 4 điểm thì tiến hành cắt ảnh và lưu ảnh
         if biggest.size != 0:
+            cv2.imshow("Picture", imgContour)       #show ảnh chưa qua xử lý
+            
             imgWraped = getWrap(img, biggest)       #imgWraped -> ảnh sau khi cắt
             
-            cv2.imshow("Picture", imgWraped)
-            cv2.imwrite("filename1.jpg", imgWraped)
+            cv2.imwrite("filename1.jpg", imgWraped) #lưu ảnh sau khi cắt
         else : pass 
         if key == 27:  # exit on ESC
             break
