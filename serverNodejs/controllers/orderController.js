@@ -19,22 +19,25 @@ class OrderController {
   async addOrder(req, res) {
     try {
       const params = req.body;
-      if(params) {
+      if(!params.area || !params.receiver || !params.phone || !params.price || !params.address) {
+  		  return res.redirect('/admin/orders/new_order');
+  		}
         
-        // const data  = await this.db.order.create({
-        //   name: params.name,
-        //   username: params.username,
-        //   email: params.email,
-        //   password: CryptoJS.SHA256(params.password).toString()
-        // });
+      const data = await this.db.order.create({
+        receiver: params.receiver,
+        area: params.area,
+        phone: params.phone,
+        price: params.price,
+        address: params.address,
+        content: params.content
+      });
 
-        if(!data) {
-          res.redirect('/admin/orders/new_order');
-        }
-        res.redirect('/admin/orders');
-        // res.redirect('..');
+      if(!data) {
+        return res.redirect('/admin/orders/new_order');
       }
-      res.redirect('/admin/orders/new_order');
+
+    	return res.status(200).redirect('/admin/orders');
+      
     } catch (error) {
       console.log(error);
       res.redirect('/admin/orders/new_order');
@@ -49,10 +52,12 @@ class OrderController {
         },
         force: true
       });
+
       if( !data) {
-        res.redirect('/admin/orders' );
+        return res.redirect('/admin/orders' );
       }
-      res.redirect('/admin/orders');
+
+      return res.redirect('/admin/orders');
     } catch (error) {
       console.log(error);
     }
@@ -72,21 +77,46 @@ class OrderController {
         res.redirect('/admin/orders' );
       }
 
-      res.render("admin/order/editOrder", { data: Orderedit});
+      return res.render("admin/order/editOrder", { data: Orderedit});
     } else {
-      res.redirect('/admin/orders' );
+      return res.redirect('/admin/orders' );
     }
     
   };
 
   async update(req, res) {
-    await this.db.order.update({ 
-      name: req.body.name, 
-      code: req.body.code 
-    }, { 
-      where: { id: req.params.id } 
-    });
-    res.send('success!');
+    try {
+      if(req.params.id) {
+        const params = req.body;
+
+        if(!params.area || !params.receiver || !params.phone || !params.price || !params.address) {
+          return res.redirect('/admin/orders/new_order');
+        }
+
+        const data = await this.db.order.update({ 
+          receiver: params.receiver,
+          area: params.area,
+          phone: params.phone,
+          price: params.price,
+          address: params.address,
+          content: params.content
+        }, { 
+          where: { id: req.params.id } 
+        });
+
+        if(!data) {
+          return res.redirect('/admin/orders/edit/'+ req.params.id );
+        }
+
+        return res.redirect('/admin/orders');
+      }
+
+      return res.status(400).redirect('/admin/orders/');
+      
+    } catch (error) {
+      return res.redirect('/admin/orders' );
+    }
+    
   };
 }
 export default function(...args) {

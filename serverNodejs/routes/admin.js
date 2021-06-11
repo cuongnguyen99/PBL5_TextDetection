@@ -11,8 +11,8 @@ export default ({db}) =>{
 	const router = express.Router();
   const adminController = new AdminController(db);
 	const orderController = new OrderController(db);
-	const productController = new ProductController(db);
-	const shopController = new ShopController(db);
+	// const productController = new ProductController(db);
+	// const shopController = new ShopController(db);
 	const userController = new UserController(db);
 
 	router.get('/login', Middleware.checkLogin , (req,res)=>adminController.loginform(req,res));
@@ -24,13 +24,15 @@ export default ({db}) =>{
 	router.get('/orders', (req,res)=>orderController.index(req,res));
 	router.get('/orders/new_order', (req,res)=>orderController.addOrderForm(req,res));
 	router.post('/orders/new_order', (req,res)=>orderController.addOrder(req,res));
+	router.get('/orders/edit/:id', (req,res)=>orderController.editform(req,res));
+	router.post('/orders/edit/:id', (req,res)=>orderController.update(req,res));
 	router.post('/orders/:id',(req,res)=>orderController.delete(req,res));
 
-	// products
-	router.get('/products', (req,res)=>productController.index(req,res));
+	// //products
+	// router.get('/products', (req,res)=>productController.index(req,res));
 
-	// shops
-	router.get('/shops', (req,res)=>shopController.index(req,res));
+	// // shops
+	// router.get('/shops', (req,res)=>shopController.index(req,res));
 
 	// users
 	router.get('/users', (req,res)=>userController.index(req,res));
