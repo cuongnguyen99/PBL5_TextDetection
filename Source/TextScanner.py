@@ -20,7 +20,7 @@ class camThread(threading.Thread):
         camPreview(self.previewName, self.camID)
 
 
-#Đưa ảnh về màu xám để xử lý
+# Xử lý ảnh
 def camProcessing(img):
     imgGray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     imgBlur = cv2.GaussianBlur(imgGray, (7, 7), 1)
@@ -30,7 +30,7 @@ def camProcessing(img):
     imgErode = cv2.erode(imgDialation, kernel, iterations=1)
     return imgErode
 
-#Tìm tọa độ 4 điểm
+
 def getContours(imgThres, imgContour):
     biggest = np.array([])
     maxArea = 0
@@ -50,7 +50,7 @@ def getContours(imgThres, imgContour):
         drawRectangle(imgContour, biggest, 2)
     return biggest
 
-#Tìm 4 điểm trên ảnh
+
 def reorder(myPoints):
     myPoints = myPoints.reshape((4, 2))
     myPointsNew = np.zeros((4, 1, 2), dtype=np.int32)
@@ -64,7 +64,7 @@ def reorder(myPoints):
 
     return myPointsNew
 
-#Cắt ảnh 
+
 def getWrap(img, biggest):
     biggest = reorder(biggest)
     #h, w, c = img.shape
@@ -95,7 +95,7 @@ def getWrap(img, biggest):
     return imgCrop
 
 ####################DrawReactangle############################
-#Nối 4 điểm lại với nhau
+
 def drawRectangle(img, biggest, thickness):
     #[0][0][0], [0][0][1]  :A
     #[1][0][0], [1][0][1]  :D
@@ -116,19 +116,19 @@ def camPreview(previewName, camID):
     cv2.namedWindow(previewName)
     cam = cv2.VideoCapture(camID)
     if cam.isOpened():  # try to get the first frame
-        success, img = cam.read()                   #img -> ảnh lúc chưa qua xử lý
-        imgThres = camProcessing(img)               #imgThres -> ảnh sau khi đã được đưa về màu xám
+        success, img = cam.read()
+        imgThres = camProcessing(img)
         # biggest = getContours(imgThres, img)
     else:
         success = False
 
     while success:
-        cv2.imshow(previewName, imgThres)           
-        success, img = cam.read()                   #img -> ảnh lúc chưa qua xử lý
+        cv2.imshow(previewName, imgThres)
+        success, img = cam.read() 
         # img = cv2.resize(img, (widthImg, heightImg))
         imgContour = img.copy()
-        imgThres = camProcessing(imgContour)        #imgThres -> ảnh sau khi đã được đưa về màu xám
-        biggest = getContours(imgThres, imgContour) #Lấy 4 điểm từ imgThes, vẽ 4 điểm (nếu có)
+        imgThres = camProcessing(imgContour)
+        biggest = getContours(imgThres, imgContour)
 
         cv2.imshow(previewName, imgContour)
         key = cv2.waitKey(20)
@@ -144,14 +144,12 @@ def camPreview(previewName, camID):
                 #cv2.imwrite("filename1.jpg", imgThres) 
             #else:
                 #pass
-                
-        #Nếu phát hiện có 4 điểm thì tiến hành cắt ảnh và lưu ảnh
+        
         if biggest.size != 0:
-            cv2.imshow("Picture", imgContour)       #show ảnh chưa qua xử lý
+            imgWraped = getWrap(img, biggest)
             
-            imgWraped = getWrap(img, biggest)       #imgWraped -> ảnh sau khi cắt
-            
-            cv2.imwrite("filename1.jpg", imgWraped) #lưu ảnh sau khi cắt
+            cv2.imshow("Picture", imgWraped)
+            cv2.imwrite("filename1.jpg", imgWraped)
         else : pass 
         if key == 27:  # exit on ESC
             break

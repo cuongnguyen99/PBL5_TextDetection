@@ -8,8 +8,8 @@ import TextScanner
 import read_vie
 
 pwm1 = pwmio.PWMOut(board.D23, duty_cycle=2 ** 15, frequency=50)
-pwm2 = pwmio.PWMOut(board.D25, duty_cycle=2 ** 15, frequency=50)
-pwm3 = pwmio.PWMOut(board.D24, duty_cycle=2 ** 15, frequency=50)
+pwm2 = pwmio.PWMOut(board.D24, duty_cycle=2 ** 15, frequency=50)
+pwm3 = pwmio.PWMOut(board.D25, duty_cycle=2 ** 15, frequency=50)
 
 
 def VatCan():

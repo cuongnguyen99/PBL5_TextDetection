@@ -8,7 +8,7 @@ import re
 data={"khu vực": "", "người nhận": "", "số điện thoại": "", "tiền thu hộ": "", "địa chỉ": "", "nội dung": ""}
 def khuVucHang():
     #############################Version 2#########################
-    img = cv2.imread("/home/pi/Desktop/PBL/PBL5_TextDetection/Image/don2.png")
+    img = cv2.imread("/home/pi/Desktop/PBL/PBL5_TextDetection/Source/filename1.jpg")
     rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     text = pytesseract.image_to_string(rgb, lang="vie")
 
@@ -47,19 +47,19 @@ def khuVucHang():
         tienThuHo=txt.find("tiền thu hộ")
         trongLuong=txt.find("trọng lượng")
         if diaChi != -1:
-            data["người nhận"]=txt[nguoiNhan:diaChi]
+            data["người nhận"]=txt[nguoiNhan:diaChi].strip()
         if dienThoai!=-1 and diaChi != -1:
             diaChi=diaChi+8
-            data["địa chỉ"]=txt[diaChi:dienThoai]
+            data["địa chỉ"]=txt[diaChi:dienThoai].strip()
         if dienThoai!=-1 and noiDung != -1:
             dienThoai=dienThoai+11
-            data["số điện thoại"]=txt[dienThoai:noiDung]
+            data["số điện thoại"]=txt[dienThoai:noiDung].strip()
         if noiDung!=-1 and tienThuHo != -1:
             noiDung=noiDung+9
-            data["nội dung"]=txt[noiDung:tienThuHo]
+            data["nội dung"]=txt[noiDung:tienThuHo].strip()
         if tienThuHo!=-1 and trongLuong != -1:
             tienThuHo=tienThuHo+12
-            data["tiền thu hộ"]=txt[tienThuHo:trongLuong]
+            data["tiền thu hộ"]=txt[tienThuHo:trongLuong].strip()
             
     else:
         for x in quan:
@@ -74,11 +74,8 @@ def khuVucHang():
                     data["khu vực"]= x
                     break
     
-    
             
 khuVucHang()
-for i in data.values() :
-    i.strip()
 print(data)
 
 
