@@ -9,42 +9,46 @@ const order = sequelize.define('order', {
   },
   receiver: {
     type: Sequelize.STRING,
-  	allowNull: {
-  		notEmpty: true,
- 	    len: [1, 255]
-  	}
+  	// allowNull: {
+  	// 	notEmpty: true,
+ 	  //   len: [1, 255]
+  	// }
   },
   area: {
     type: Sequelize.STRING,
-  	allowNull: {
-  		notEmpty: true,
- 	    len: [1, 255]
-  	}
+  	// allowNull: {
+  	// 	notEmpty: true,
+ 	  //   len: [1, 255]
+  	// }
   },
   phone: {
     type: Sequelize.STRING,
-  	allowNull: {
-  		notEmpty: true,
- 	    len: [1, 255]
-  	}
+  	// allowNull: {
+  	// 	notEmpty: true,
+ 	  //   len: [1, 255]
+  	// }
   },
   price: {
     type: Sequelize.DECIMAL(25, 1),
-    allowNull: false
+    // allowNull: false
   },
   address: {
     type: Sequelize.STRING,
-  	allowNull: {
-  		notEmpty: true,
- 	    len: [1, 255]
-  	}
+  	// allowNull: {
+  	// 	notEmpty: true,
+ 	  //   len: [1, 255]
+  	// }
   },
   content:{
     type: Sequelize.TEXT,
-    allowNull: {
-  		notEmpty: true,
- 	    len: [1, 255]
-  	}
+    // allowNull: {
+  	// 	notEmpty: true,
+ 	  //   len: [1, 255]
+  	// }
+  },
+  status: {
+    type: Sequelize.INTEGER,
+    defaultValue: 0 
   }
   // orderCode: {
   //   type: Sequelize.STRING,
@@ -76,7 +80,7 @@ const order = sequelize.define('order', {
 },{
   underscored: true,
   freezeTableName: true,
-  timestamps: false
+  timestamps: true
 }, {
   charset: 'utf8',
   collate: 'utf8_general_ci'

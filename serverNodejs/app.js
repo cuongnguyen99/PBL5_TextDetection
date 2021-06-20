@@ -116,8 +116,8 @@ function onListening() {
   debug('Listening on ' + bind);
 }
 
-app.listen(8080, function() {
-  console.log("server is running on port 8080");
+app.listen(8000, function() {
+  console.log("server is running on port 8000");
 });
 server.on('error', onError);
 server.on('listening', onListening);

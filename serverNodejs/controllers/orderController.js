@@ -99,7 +99,8 @@ class OrderController {
           phone: params.phone,
           price: params.price,
           address: params.address,
-          content: params.content
+          content: params.content,
+          status: 2
         }, { 
           where: { id: req.params.id } 
         });

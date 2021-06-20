@@ -18,10 +18,18 @@ class apisOrderController {
     try {
       
 			if(!params.area || !params.receiver || !params.phone || !params.price || !params.address) {
+        const errorData = await this.db.order.create({
+          receiver: params.receiver,
+          area: params.area,
+          phone: params.phone,
+          price: params.price,
+          address: params.address,
+          content: params.content,
+          status: 1
+        });
+
   			return res.status(400).json({ TRAVE: false, messenger: 'something are invalid'});
   		}
-      console.log(params);
-      console.log(req.headers.token);
 
       const data = await this.db.order.create({
         receiver: params.receiver,
@@ -31,9 +39,11 @@ class apisOrderController {
         address: params.address,
         content: params.content
       });
-      
-      console.log(data);
 
+      if(!data) {
+        return res.status(400).json({ TRAVE: false, messenger: 'Error create data'});
+      }
+      
     	return res.status(200).json({ TRAVE: true, messenger: 'Insert data is success'});
     } catch (err) {
     	console.log(err);

@@ -31,7 +31,6 @@ class AdminController{
             const roles='admin';
             await this.addSession(req , res , req.body.username, roles);
             var data = [{ userId: admin.id}, { userName: admin.phone}, {roles: roles }, { expiredAt: Math.floor(Date.now() / 1000) + (60 * 60)}]
-            var ciphertext =  await this.encrypt(data);
             return res.redirect('/admin',res,req);
 			  }else{
 			   	return res.redirect('/admin/login');
@@ -52,7 +51,51 @@ class AdminController{
 	}
 
   async dashboard(req,res) {
-    res.render("admin/index");
+		let date_ob = new Date();
+    let date = ("0" + date_ob.getDate()).slice(-2);
+
+    // current month
+    let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
+		// current year
+		let year = date_ob.getFullYear();
+    
+		const data = year+'-'+month+'-'+date
+    
+
+		const Op = this.db.Op;
+
+		let OrderInDay=await this.db.order.count({
+			where: await this.db.Sequelize.where(await this.db.Sequelize.fn('DATE', await this.db.Sequelize.col('created_at')), data)
+    })
+
+		let OrderInMonth=await this.db.order.count({
+     
+			where: [ 
+				await this.db.Sequelize.where(await this.db.Sequelize.fn('MONTH', await this.db.Sequelize.col('created_at')), month),
+				await this.db.Sequelize.where(await this.db.Sequelize.fn('YEAR', await this.db.Sequelize.col('created_at')), year)
+			]
+    })
+
+		let ErrorOrder = await this.db.order.count({
+			where: {
+				status: 1
+			}
+		})
+
+		let UpdatedErrorOrder = await this.db.order.count({
+			where: {
+				status: 1
+			}
+		})
+
+    const data2 = {
+      orderInDay : OrderInDay,
+			orderInMonth: OrderInMonth,
+			errorOrder: ErrorOrder,
+			updatedErrorOrder: UpdatedErrorOrder,
+    }
+
+    res.render("admin/index", { data: data2});
   }
 
 	// async registerform(req,res){
