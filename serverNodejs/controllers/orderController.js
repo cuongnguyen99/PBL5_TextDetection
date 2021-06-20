@@ -6,9 +6,32 @@ class OrderController {
   }
 
   async index(req, res) {
-    res.locals.user = req.session.userName;
-    let order = await this.db.order.findAll();
-    res.render("admin/order/index", { data: order , notify: null});
+    try {
+      let order = null;
+      
+      res.locals.user = req.session.userName;
+      if(req.query.search) {
+        order = await this.db.order.findAll({
+          where: {
+            [this.db.Op.or]: [
+              { receiver: req.query.search },
+              { phone: req.query.search },
+              { address: req.query.search }
+            ]
+          }
+        })
+
+
+      } else {
+        order = await this.db.order.findAll();
+      }
+      
+      res.render("admin/order/index", { data: order , notify: null});
+      
+    } catch (error) {
+      console.log(error)
+    }
+   
   };
 
   async addOrderForm(req,res) {

@@ -12,12 +12,12 @@ class AdminController{
       this.db =db
   };
 	
-	async loginform(req,res){
+	async loginform(req,res) {
 		res.locals.user = req.session.user;
 		res.render("admin/login");
 	};
 	
-	async login(req,res){
+	async login(req,res) {
 		if(req.body.username){
 			let admin = await this.db.users.findOne({
 				attributes:['id','username','email','password'],
