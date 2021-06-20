@@ -13,3 +13,15 @@
 #Cường
 
 #Phúc
+
+* Requirement :
+	- node version up 14.17
+	- npm version up 7.x
+
+* Run project:
+	- cd serverNodejs
+	- npm install
+	- edit file db.js in serverNodejs models > db.js
+	- npm sync-db  (create and settup db on mysql)
+	- npm init-admin (create and init admin account into db)
+	- npm start (run on port 8000)
