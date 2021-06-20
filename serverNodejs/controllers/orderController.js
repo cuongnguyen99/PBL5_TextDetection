@@ -1,4 +1,5 @@
 import CryptoJS  from "crypto-js";
+import queryOption from '../helpers/query.js';
 
 class OrderController {
   constructor(db) {
@@ -10,21 +11,34 @@ class OrderController {
       let order = null;
       
       res.locals.user = req.session.userName;
+
+      const { page, size } = req.query;
+      const { limit, offset } = await queryOption.getPagination(page-1, size);
+
       if(req.query.search) {
-        order = await this.db.order.findAll({
+        order = await this.db.order.findAndCountAll({
           where: {
             [this.db.Op.or]: [
               { receiver: req.query.search },
               { phone: req.query.search },
               { address: req.query.search }
             ]
-          }
+          },
+          distinct:true,
+          limit: limit,
+          offset: offset
         })
 
 
       } else {
-        order = await this.db.order.findAll();
+        order = await this.db.order.findAndCountAll({
+          distinct:true,
+          limit: limit,
+          offset: offset,
+        });
       }
+      
+      order = await queryOption.getPagingData(order, page-1, limit);
       
       res.render("admin/order/index", { data: order , notify: null});
       
