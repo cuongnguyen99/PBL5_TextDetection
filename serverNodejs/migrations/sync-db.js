@@ -9,5 +9,6 @@ models()
     console.log('Migrated successfull');
   })
   .catch( err => {
+    console.log(err)
     console.log(JSON.stringify(err));
   })

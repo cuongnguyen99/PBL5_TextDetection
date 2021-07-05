@@ -1,15 +1,18 @@
 import Sequelize from 'sequelize';
 import sequelize from './db.js';
 
-const address = sequelize.define('address', {
+const area = sequelize.define('area', {
   id: {
     type: Sequelize.INTEGER,
     primaryKey: true,
     autoIncrement: true
   },
   name: {
-    type: Sequelize.DECIMAL(25, 1),
+    type: Sequelize.STRING,
     allowNull: false
+  },
+  city: {
+    type: Sequelize.STRING,
   }
 },{
   underscored: true,
@@ -20,11 +23,11 @@ const address = sequelize.define('address', {
   collate: 'utf8_general_ci'
 });
 
-address.associate = function(models) {
-  address.belongsToMany(models.order, {
-    through: "address_order",
+area.associate = function(models) {
+  area.belongsToMany(models.order,{
+    through: "area_order",
     as: "order",
-    foreignKey: "address_id",
+    foreignKey: "area_id", 
   });
 };
-export default address;
+export default area;

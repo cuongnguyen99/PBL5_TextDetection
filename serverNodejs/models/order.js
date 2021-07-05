@@ -14,13 +14,13 @@ const order = sequelize.define('order', {
  	  //   len: [1, 255]
   	// }
   },
-  area: {
-    type: Sequelize.STRING,
+  // area: {
+  //   type: Sequelize.STRING,
   	// allowNull: {
   	// 	notEmpty: true,
  	  //   len: [1, 255]
   	// }
-  },
+  // },
   phone: {
     type: Sequelize.STRING,
   	// allowNull: {
@@ -86,13 +86,13 @@ const order = sequelize.define('order', {
   collate: 'utf8_general_ci'
 });
 
-// order.associate = function(models) {
-//   order.belongsToMany(models.address, {
-//     through: "address_order",
-//     as: "address",
-//     foreignKey: "order_id",
-//   });
-// };
+order.associate = function(models) {
+  order.belongsToMany(models.area, {
+    through: "area_order",
+    as: "area",
+    foreignKey: "order_id",  
+  });
+};
 
 // order.associate = function(models) {
 //   order.belongsToMany(models.product, {

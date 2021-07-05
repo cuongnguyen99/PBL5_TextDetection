@@ -8,9 +8,9 @@ export default async() => {
     modelUsers = modelUsers.default;
     db[modelUsers.tableName] = modelUsers;
       
-  // let modelAddress = await import(`./address.js`);
-  //   modelAddress = modelAddress.default;
-  //   db[modelAddress.tableName] = modelAddress;
+  let modelAddress = await import(`./area.js`);
+    modelAddress = modelAddress.default;
+    db[modelAddress.tableName] = modelAddress;
 
   let modelOrder = await import(`./order.js`);
     modelOrder = modelOrder.default;

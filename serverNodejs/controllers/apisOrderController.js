@@ -15,12 +15,20 @@ class apisOrderController {
 
   async insertData(req, res) {
     const params = req.body;
+    let area = null
     try {
-      
+      if(params.area) {
+        area = await this.db.area.findOne({
+          where: {
+            name: params.area
+          }
+        })
+      } 
+
 			if(!params.area || !params.receiver || !params.phone || !params.price || !params.address) {
+        
         const errorData = await this.db.order.create({
           receiver: params.receiver,
-          area: params.area,
           phone: params.phone,
           price: params.price,
           address: params.address,
@@ -31,14 +39,34 @@ class apisOrderController {
   			return res.status(400).json({ TRAVE: false, messenger: 'something are invalid'});
   		}
 
+      if(!area) {
+        area = await this.db.area.create({
+          name: params.area,
+          city: "Đà Nẵng"
+        });
+      }
+
       const data = await this.db.order.create({
         receiver: params.receiver,
-        area: params.area,
         phone: params.phone,
         price: params.price,
         address: params.address,
-        content: params.content
+        content: params.content,
+        areas: [{
+          id: area.id,
+          area_order:{
+            selfGranted: true
+          }
+        },{
+          include: await this.db.area
+        }]
       });
+      await data.addArea(area, { through: { selfGranted: false } });
+      // const areaOrder = await this.db.area_order.create({
+      //   orderId: data.id,
+      //   areaId: area.id
+      // })
+
 
       if(!data) {
         return res.status(400).json({ TRAVE: false, messenger: 'Error create data'});

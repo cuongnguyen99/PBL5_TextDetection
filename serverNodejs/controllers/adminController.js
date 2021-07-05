@@ -84,7 +84,7 @@ class AdminController{
 
 		let UpdatedErrorOrder = await this.db.order.count({
 			where: {
-				status: 1
+				status: 2
 			}
 		})
 
@@ -97,31 +97,6 @@ class AdminController{
 
     res.render("admin/index", { data: data2});
   }
-
-	// async registerform(req,res){
-	// 	res.locals.user = req.session.user;
-	// 	res.render("login/register");
-	// };
-
-	// async register(req,res){
-	// 	await this.db.staffs.create({
-	// 		name: req.body.name,
-	// 		phone: req.body.username,
-	// 		password: CryptoJS.hash(req.body.password),
-  //     isAdmin: 1
-  //   });
-
-	// 	const roles='admin';
-	// 	Session.addSession(req,res,req.body.username, roles);
-	// 	transporter.sendMail(mailOptions, function(error, info){
-	// 		if (error) {
-	// 			console.log(error);
-	// 		} else {
-	// 			console.log('Email sent: ' + info.response);
-	// 		}
-	// 	});
-	// 	res.redirect('/companies',res,req);
-	// };
 
   async compare(password,code){
     const crypt= await this.hash(code);
