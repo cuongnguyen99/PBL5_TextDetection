@@ -23,5 +23,5 @@
 	- npm install
 	- edit file db.js in serverNodejs models > db.js
 	- npm run sync-db  (create and settup db on mysql)
-	- npm init-admin (create and init admin account into db)
+	- npm run init-admin (create and init admin account into db)
 	- npm start (run on port 8000)
