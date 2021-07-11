@@ -88,11 +88,80 @@ class AdminController{
 			}
 		})
 
+		let allAreaInMonth = await this.db.area.findAll({
+			
+			include: [{
+					model: this.db.order, 
+					as:"order",
+					where: [ 
+						await this.db.Sequelize.where(await this.db.Sequelize.fn('MONTH', await this.db.Sequelize.col('order.created_at')), month),
+						await this.db.Sequelize.where(await this.db.Sequelize.fn('YEAR', await this.db.Sequelize.col('order.created_at')), year)
+					]
+			}],
+			// attributes: [
+      //   'name', [await this.db.Sequelize.fn("COUNT", await this.db.Sequelize.col("order_id")), "total"] 
+			// ],
+		})
+
+		let allAreaInDay = await this.db.area.findAll({
+			
+			include: [{
+					model: this.db.order, 
+					as:"order",
+					where: [ 
+						await this.db.Sequelize.where(await this.db.Sequelize.fn('DATE', await this.db.Sequelize.col('order.created_at')), data)
+					]
+			}],
+			// attributes: [
+      //   'name', [await this.db.Sequelize.fn("COUNT", await this.db.Sequelize.col("order_id")), "total"] 
+			// ],
+		})
+
+		let arrayAreaMonth = [];
+		let totalMonth = null;
+		let JsondataMonth = {}
+		allAreaInMonth.forEach(element => {
+			console.log("month")
+			console.log(element.order.length);
+			totalMonth += element.order.length;
+			JsondataMonth[element.name]= element.order.length;
+			arrayAreaMonth.push(element.name);
+		});
+
+		
+
+		let arrayAreaDay = [];
+		let totalDay = null;
+		let JsondataDay = {}
+		allAreaInDay.forEach(element => {
+			console.log("day")
+			console.log(element.order.length);
+			totalDay += element.order.length;
+			JsondataDay[element.name]= element.order.length;
+			arrayAreaDay.push(element.name);
+		});
+		
+
     const data2 = {
       orderInDay : OrderInDay,
 			orderInMonth: OrderInMonth,
 			errorOrder: ErrorOrder,
 			updatedErrorOrder: UpdatedErrorOrder,
+			arrayAreaMonth: arrayAreaMonth,
+			totalMonth: totalMonth,
+			JsondataMonth: JSON.stringify(JsondataMonth),
+			allAreaInDay: allAreaInDay,
+			arrayColor: ['#FF6633', '#FFB399', '#FF33FF', '#FFFF99', '#00B3E6', 
+		  '#E6B333', '#3366E6', '#999966', '#99FF99', '#B34D4D',
+		  '#80B300', '#809900', '#E6B3B3', '#6680B3', '#66991A', 
+		  '#FF99E6', '#CCFF1A', '#FF1A66', '#E6331A', '#33FFCC',
+		  '#66994D', '#B366CC', '#4D8000', '#B33300', '#CC80CC', 
+		  '#66664D', '#991AFF', '#E666FF', '#4DB3FF', '#1AB399',
+		  '#E666B3', '#33991A', '#CC9999', '#B3B31A', '#00E680', 
+		  '#4D8066', '#809980', '#E6FF80', '#1AFF33', '#999933',
+		  '#FF3380', '#CCCC00', '#66E64D', '#4D80CC', '#9900B3', 
+		  '#E64D66', '#4DB380', '#FF4D4D', '#99E6E6', '#6666FF'],
+			
     }
 
     res.render("admin/index", { data: data2});
