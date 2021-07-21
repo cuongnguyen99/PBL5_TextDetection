@@ -1,0 +1,77 @@
+<%- include('../../layouts/header.ejs') -%>
+
+<body id="page-top">
+  <!-- Page Wrapper -->
+  <div id="wrapper">
+      <!-- Sidebar -->
+      <%- include('../../layouts/sidebar.ejs') -%>
+      <!-- Content Wrapper -->
+      <div id="content-wrapper" class="d-flex flex-column">
+          <!-- Main Content -->
+          <div id="content">
+            <!-- Topbar -->
+            <%- include('../../layouts/navbar.ejs') -%>
+            <!-- End of Topbar -->
+
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+
+              <!-- Page Heading -->
+              <h1 class="h3 mb-2 text-gray-800">Tables</h1>
+
+              <!-- DataTales Example -->
+              <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Shops List</h6>
+                </div>
+                <div class="card-body">
+                  <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                      <thead>
+                        <tr>
+                          <th>ID</th>
+                          <th>Shop Code</th>
+                          <th>Name</th>
+                          <th style="width: 50px;"></th>
+                        </tr>
+                      </thead>
+                        
+                      <tbody>
+                          <% for (var i = 0; i < data.length; i++) { %>
+                            <% var row = data[i]; %>
+                            <tr>
+                              <td><%= row.id %></td>
+                              <td><%= row.shopCode %></td>
+                              <td><%= row.name %></td>
+                              <td class="d-flex">
+                                <button class="btn" type="submit">
+                                  <a data-toggle="modal" data-target="#modal-edit-game-target" onclick="loadModalUpdateData('<%= row.id %>')" href="#" title="Edit game target" class="txt-u"><i class="fas fa-edit"></i></a>
+                                </button>
+                                <form action="/admin/parters/<%=row.id%>" method="POST">
+                                  <button class="btn btn-danger" type="submit">
+                                    <i class="fas fa-trash"></i>
+                                  </button>
+                                </form>
+                              </td>
+                            </tr>
+                          <% } %>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+
+            </div> 
+          </div>
+          <!-- End of Main Content -->
+          <!-- Footer -->
+          <%- include('../../layouts/footer.ejs') -%>
+          <!-- End of Footer -->
+        </div>
+        <!-- End of Content Wrapper -->
+    </div>
+    <!-- End of Page Wrapper -->
+    <%- include('../../layouts/javascript.ejs') -%>
+  </body>
+  
+</html>

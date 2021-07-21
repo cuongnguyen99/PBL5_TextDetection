@@ -1,0 +1,108 @@
+<%- include('../../layouts/header.ejs') -%>
+
+<body id="page-top">
+  <!-- Page Wrapper -->
+  <div id="wrapper">
+      <!-- Sidebar -->
+      <%- include('../../layouts/sidebar.ejs') -%>
+      <!-- Content Wrapper -->
+      <div id="content-wrapper" class="d-flex flex-column">
+          <!-- Main Content -->
+          <div id="content">
+            <!-- Topbar -->
+            <%- include('../../layouts/navbar.ejs') -%>
+            <!-- End of Topbar -->
+
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+
+              <!-- Page Heading -->
+              <h1 class="h3 mb-2 text-gray-800">Tables</h1>
+
+              <!-- DataTales Example -->
+              <div class="card shadow mb-4">
+                <div class="card-header py-3 row">
+                    <h6 class="m-0 font-weight-bold text-primary">Orders List</h6>
+                    <form class="form-inline ml-auto" id="form-search" >
+                      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="search">
+                      <button class="btn btn-outline-dark my-2 my-sm-0" type="submit">Search</button>
+                    </form>
+                </div>
+                <div class="card-body">
+                  <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                      <thead>
+                        <tr>
+                          <th>ID</th>
+                          <th>Khu Vực</th>
+                          <th>Người Nhận</th>
+                          <th>Số điện thoại</th>
+                          <th>Giá</th>
+                          <th>Địa Chỉ</th>
+                          <th>Nội Dung</th>
+                          <th style="width: 50px;"></th>
+                        </tr>
+                      </thead>
+                        
+                      <tbody>
+                          <% for (var i = 0; i < data.value.length; i++) { %>
+                            <% var row = data.value[i]; %>
+                            <tr>
+                              <td><%= row.id %></td>
+                              <td><%= row.area %></td>
+                              <td><%= row.receiver %></td>
+                              <td><%= row.phone %></td>
+                              <td><%= row.price %></td>
+                              <td><%= row.address %></td>
+                              <td><%= row.content %></td>
+
+                              <td class="d-flex">
+                                <!-- <button class="btn" type="submit">
+                                  <a data-toggle="modal" data-target="#modal-edit-game-target" onclick="loadModalUpdateData('<%= row.id %>')" href="#" title="Edit game target" class="txt-u"><i class="fas fa-edit"></i></a>
+                                </button> -->
+                                <button class="btn " type="submit">
+                                  <a  href="/admin/orders/edit/<%=row.id%>" title="Edit order"class="txt-u"><i class="fas fa-edit"></i></a>
+                                </button>
+                                
+                                <form action="/admin/orders/<%=row.id%>" method="POST">
+                                  <button class="btn btn-danger" type="submit">
+                                    <i class="fas fa-trash"></i>
+                                  </button>
+                                </form>
+                              </td>
+                            </tr>
+                          <% } %>
+                      </tbody>
+                    </table>
+                    <% current = data.currentPage %>
+                    <% total = data.totalPages %>
+                    <%- include('../common/pagination.ejs') -%>
+                  </div>
+                </div>
+              </div>
+
+            </div> 
+          </div>
+          <!-- End of Main Content -->
+          <!-- Footer -->
+          <%- include('../../layouts/footer.ejs') -%>
+          <!-- End of Footer -->
+        </div>
+        <!-- End of Content Wrapper -->
+    </div>
+    <!-- End of Page Wrapper -->
+    <%- include('../../layouts/javascript.ejs') -%>
+    <script>
+      $("form-search").on("submit", function(event) {
+        event.preventDefault();
+        var form = $(this)[0];
+        var dataFrom = new FormData(form);
+
+        const path =window.location.origin + `/admin/orders`;
+        const checkString = path.includes("?");
+        location.replace(path + `&search=${dataFrom.search}` );
+      })
+    </script>
+  </body>
+  
+</html>

@@ -1,0 +1,60 @@
+<% if(total != 1){ %>
+  <nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+      <li class="page-item">
+        <a class="page-link" onclick="pagination(1)" aria-label="Previous"  <% if(current == 0){ %> style="display:none" <% } %> >
+          <span aria-hidden="true">&laquo;</span>
+        </a>
+      </li>
+      <% if(total < 6){ %>
+
+        <% for(var i = 0; i < total ; i++) {%>
+          <li class="page-item <% if(current == i){ %> active <% } %>"><a class="page-link" onclick="pagination(<%= i+1 %>)"><%= i+1 %></a></li>
+        <% }%>
+
+      <% } else if(current < 3 && current >= 0) { %>
+
+        <% for(var i = 0; i < current + 1 ; i++){ %>
+          <li class="page-item <% if(current == i){ %> active <% } %>"><a class="page-link" onclick="pagination(<%= i+1 %>)"><%= i+1 %></a></li>
+        <% }%>
+        <li class="page-item "><a class="page-link" onclick="pagination(<%=total%>)"><%=total %></a></li>
+
+      <% } else if(current < total-2 && current >= 3) {%>
+
+        <li class="page-item"><a class="page-link" onclick="pagination(1)">1</a></li>
+        <% for(var i = 0; i < current + 1 ; i++) {%>
+          <li class="page-item<% if(current == i) {%>active<%}%>"><a class="page-link" onclick="pagination(<%= i+1%>)"><%= i+1 %></a></li>
+        <% }%>
+        <li class="page-item"><a class="page-link" onclick="pagination(<%= total %>)"><%=total %></a></li>
+      
+        <% } else if(current <= total- 3 && current >= total - 2) {%>
+          <li class="page-item"><a class="page-link" onclick="pagination(1)">1</a></li>
+          <% for(var i = 0; i <= total ; i++) {%>
+            <li class="page-item <% if(current == i) {%>active<%}%>"><a class="page-link" onclick="pagination(<%= i+1%>)"><%= i+1 %></a></li>
+          <% }%>
+     
+       
+      <% } %>
+      <li class="page-item">
+        <a class="page-link" onclick="pagination(<%=total%>)" aria-label="Next"  <% if(current == total-1 ){ %> style="display:none" <% } %> >
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+  <% }%>
+
+  <script>
+  function pagination(value) {
+    const path = window.location.href ;
+    const checkString = path.includes("?");
+    
+    if(checkString) {
+      location.replace(path.includes('page')? path.replace(`page=${<%=current+1%>}` , `page=${value}`): path + `&page=${value}` );
+    } else {
+      location.replace(path + `?page=${value}` );
+    }
+  }
+  </script>
+  
+ 
