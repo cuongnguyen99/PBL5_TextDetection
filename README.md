@@ -9,6 +9,7 @@
 		https://www.youtube.com/watch?v=JkzFjj2hjtw
 
 #Hoàng
+	Học code chi nhiều cho mệt. nghỉ ngơi đi
 
 #Cường
 
