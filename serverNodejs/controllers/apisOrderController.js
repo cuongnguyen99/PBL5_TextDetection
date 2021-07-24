@@ -52,6 +52,7 @@ class apisOrderController {
         price: params.price,
         address: params.address,
         content: params.content,
+        status: 2,
         areas: [{
           id: area.id,
           area_order:{

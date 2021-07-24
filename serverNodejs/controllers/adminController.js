@@ -76,6 +76,10 @@ class AdminController{
 			]
     })
 
+		let AllOrder = await this.db.order.count({
+			status: 0
+		})
+
 		let ErrorOrder = await this.db.order.count({
 			where: {
 				status: 1
@@ -121,8 +125,6 @@ class AdminController{
 		let totalMonth = null;
 		let JsondataMonth = {}
 		allAreaInMonth.forEach(element => {
-			console.log("month")
-			console.log(element.order.length);
 			totalMonth += element.order.length;
 			JsondataMonth[element.name]= element.order.length;
 			arrayAreaMonth.push(element.name);
@@ -151,6 +153,7 @@ class AdminController{
 			totalMonth: totalMonth,
 			JsondataMonth: JSON.stringify(JsondataMonth),
 			allAreaInDay: allAreaInDay,
+			allOrder:AllOrder,
 			arrayColor: ['#FF6633', '#FFB399', '#FF33FF', '#FFFF99', '#00B3E6', 
 		  '#E6B333', '#3366E6', '#999966', '#99FF99', '#B34D4D',
 		  '#80B300', '#809900', '#E6B3B3', '#6680B3', '#66991A', 

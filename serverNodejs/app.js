@@ -65,8 +65,24 @@ app.use(function(err, req, res, next) {
 
 const db = await models();
 
-app.use('/admin', adminRouter({ db }));
+app.use('/', adminRouter({ db }));
 app.use('/apis', apiRouter({ db }));
+
+app.use((req, res, next) => {
+  // const error = new Error("Not found");
+  // error.status = 404;
+  // next(error);
+  res.render('admin/error')
+});
+// error handler middleware
+app.use((error, req, res, next) => {
+  res.status(error.status || 500).send({
+    error: {
+      status: error.status || 500,
+      message: error.message || 'Internal Server Error',
+    },
+  });
+});
 
 function normalizePort(val) {
   var port = parseInt(val, 10);
@@ -119,6 +135,7 @@ function onListening() {
 app.listen(8000, function() {
   console.log("server is running on port 8000");
 });
+
 server.on('error', onError);
 server.on('listening', onListening);
 
