@@ -20,3 +20,4 @@ def send(data):
     pastebin_url=pastebin_url[1].replace('"}','')
     print("The pastebin URL is:%s" % pastebin_url)
     return pastebin_url
+

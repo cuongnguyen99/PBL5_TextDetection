@@ -2,130 +2,83 @@ import cv2
 import threading
 import numpy as np
 import math
-# import read_vie
+from datetime import datetime
+import read_vie
 
 import RPi.GPIO as GPIO
 import time
-import board
-import pwmio
-from adafruit_motor import servo
+#import board
+#import pwmio
+#from adafruit_motor import servo
 
 from PIL import Image
 import pytesseract
 import re
+import os
+import apiServer
 
 #Global variable
-vatcan = 0
 
-# =================== Servo and Cam bien =========================
+GPIO.setmode(GPIO.BCM)
+GPIO.setwarnings(False)
 
-def VatCan():
-    #   GPIO.setmode(GPIO.BCM)
+GPIO.setup(23, GPIO.OUT) #GPIO23
+GPIO.setup(24, GPIO.OUT) #GPIO24
+GPIO.setup(25, GPIO.OUT) #GPIO25
+GPIO.setup(16, GPIO.IN)
+GPIO.setup(26, GPIO.IN)
+GPIO.setup(6, GPIO.IN)
+
+datas=[]
+
+
+def onServo_1(state):
+    if state == 1:
+        GPIO.output(23, GPIO.HIGH)
+    else:        
+        GPIO.output(23, GPIO.LOW)
+        
+def onServo_2(state):
+    if state == 1:
+        GPIO.output(24, GPIO.HIGH)
+    else:        
+        GPIO.output(24, GPIO.LOW)
+        
+def onServo_Stop(state):    
+    if state == 1:
+        GPIO.output(25, GPIO.HIGH)
+    else:        
+        GPIO.output(25, GPIO.LOW)
+
+def VatCan():    
+    GPIO.setmode(GPIO.BCM)
+    inp = GPIO.input(16)
+    return inp
+
+def Finished1():    
+    GPIO.setmode(GPIO.BCM)
     inp = GPIO.input(26)
-    #    GPIO.cleanup()
+    return inp
+
+def Finished2():    
+    GPIO.setmode(GPIO.BCM)
+    inp = GPIO.input(6)
     return inp
 
 
-def Servo_1():
-    my_servo = servo.Servo(pwm1)
-    my_servo.angle = 70
-    time.sleep(0.5)
-    my_servo.angle = 0
-    time.sleep(2)
-    my_servo.angle = 70
 
-
-def Servo_2():
-    my_servo = servo.Servo(pwm2)
-    my_servo.angle = 70
-    time.sleep(0.5)
-    my_servo.angle = 0
-    time.sleep(4)
-    my_servo.angle = 70
-
-
-def Servo_3():
-    my_servo = servo.Servo(pwm3)
-    my_servo.angle = 70
-    time.sleep(0.5)
-    my_servo.angle = 0
-    time.sleep(13)
-    my_servo.angle = 70
-
-
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(26, GPIO.IN)  # Read output from PIR motion sensor
-
-# =================== Read text ==================================
-
-data = {"khu vực": "", "người nhận": "", "số điện thoại": "", "tiền thu hộ": "", "địa chỉ": "", "nội dung": ""}
-
-
-def khuVucHang():
-    #############################Version 2#########################
-    img = cv2.imread("")
-    rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-    text = pytesseract.image_to_string(rgb, lang="vie")
-
-    ###########################################
-    text = text.strip()
-
-    # cv2.imshow("image",rgb)
-
-    quan = ['hải châu', 'cẩm lệ', 'thanh khê', 'liên chiểu', 'ngũ hành sơn', 'sơn trà', 'hòa vang', 'hoàng sa']
-
-    text = text.lower()
-    text = text.replace("\n", " ")
-    print(text)
-
-    textSplit = text.split("người nhận:")
-    if len(textSplit) > 1:
-        for x in quan:
-            if textSplit[1].find(x) != -1:
-                if x == 'hải châu' or x == 'ngũ hành sơn' or x == 'sơn trà':
-                    data["khu vực"] = x
-                    break
-                elif x == 'cẩm lệ' or x == 'thanh khê' or x == 'liên chiểu':
-                    data["khu vực"] = x
-                    break
-                elif x == 'hòa vang' or x == 'hoàng sa':
-                    data["khu vực"] = x
-                    break
-
-        txt = textSplit[1]
-        nguoiNhan = 1
-        diaChi = txt.find("địa chỉ")
-        dienThoai = txt.find("điện thoại")
-        noiDung = txt.find("nội dung")
-        tienThuHo = txt.find("tiền thu hộ")
-        trongLuong = txt.find("trọng lượng")
-        if diaChi != -1:
-            data["người nhận"] = txt[nguoiNhan:diaChi]
-        if dienThoai != -1 and diaChi != -1:
-            diaChi = diaChi + 8
-            data["địa chỉ"] = txt[diaChi:dienThoai]
-        if dienThoai != -1 and noiDung != -1:
-            dienThoai = dienThoai + 11
-            data["số điện thoại"] = txt[dienThoai:noiDung]
-        if noiDung != -1 and tienThuHo != -1:
-            noiDung = noiDung + 9
-            data["nội dung"] = txt[noiDung:tienThuHo]
-        if tienThuHo != -1 and trongLuong != -1:
-            tienThuHo = tienThuHo + 12
-            data["tiền thu hộ"] = txt[tienThuHo:trongLuong]
-
-    else:
-        for x in quan:
-            if text.find(x) != -1:
-                if x == 'hải châu' or x == 'ngũ hành sơn' or x == 'sơn trà':
-                    data["khu vực"] = x
-                    break
-                elif x == 'cẩm lệ' or x == 'thanh khê' or x == 'liên chiểu':
-                    data["khu vực"] = x
-                    break
-                elif x == 'hòa vang' or x == 'hoàng sa':
-                    data["khu vực"] = x
-                    break
+class api(threading.Thread):
+    def __init__(self):
+        super().__init__()
+    def run(self):
+        while True:
+            if len(datas)>0:
+                messenger=apiServer.send(datas[0])
+                if messenger == "Insert data is success" or messenger == "something are invalid":
+                    datas.pop(0)
+                    
+                
+            
 
 # =================== Camera =====================================
 class camThread(threading.Thread):
@@ -228,6 +181,7 @@ def drawRectangle(img, biggest, thickness):
 
 ################################################
 def camPreview(previewName, camID):
+    vatcan = 0
     cv2.namedWindow(previewName)
     cam = cv2.VideoCapture(camID)
     if cam.isOpened():  # try to get the first frame
@@ -241,68 +195,102 @@ def camPreview(previewName, camID):
         cv2.imshow(previewName, imgThres)
         success, img = cam.read() 
         # img = cv2.resize(img, (widthImg, heightImg))
-        imgContour = img.copy()
-        imgThres = camProcessing(imgContour)
-        biggest = getContours(imgThres, imgContour)
+#         imgContour = img.copy()
+#         imgThres = camProcessing(imgContour)
+#         biggest = getContours(imgThres, imgContour)
 
-        cv2.imshow(previewName, imgContour)
+        cv2.imshow(previewName, img)
         key = cv2.waitKey(20)
-# <<<<<<< HEAD
-        #if biggest.size != 0:
-            #imgWraped = getWrap(img, biggest)
-            #cv2.imshow("Picture", imgWraped)
-            #cv2.imwrite("filename1.jpg",imgWraped) 
-        #if key == ord("q"):
-            #if biggest.size != 0:
-                #imgWraped = getWrap(img, biggest)
-                
-                #cv2.imshow("Picture", imgThres)
-                #cv2.imwrite("filename1.jpg", imgThres) 
-            #else:
-                #pass
-        
-        if biggest.size != 0:
-            imgWraped = getWrap(img, biggest)
-            
-            cv2.imshow("Picture", imgWraped)
-            cv2.imwrite("filename1.jpg", imgWraped)
-        else : pass 
-# =======
-                
-        #Nếu phát hiện có 4 điểm thì tiến hành cắt ảnh và lưu ảnh
-        # if biggest.size != 0:
-        #     cv2.imshow("Picture", imgContour)       #show ảnh chưa qua xử lý
-        #
-        #     imgWraped = getWrap(img, biggest)       #imgWraped -> ảnh sau khi cắt
-        #
-        #     cv2.imwrite("filename1.jpg", imgWraped) #lưu ảnh sau khi cắt
-        # else : pass
-
+#         print(1)
         #Phát hiện vật cản
+   
         if VatCan() == 0:
             # Tăng chỉ số khi phát hiện vật cản lên 1 đơn vị
             vatcan += 1
+#             print(2)
 
             # Lần đầu phát hiện vật cản thì tiến hành chụp ảnh
             if vatcan == 1:
-                cv2.imshow("Picture", imgContour)       #show ảnh chưa qua xử lý
+#                 print(3)
+                continue
+            elif vatcan == 2:
+#                 print(4)                
+                timeRead = datetime.timestamp(datetime.now())
+                while (timeRead > datetime.timestamp(datetime.now()) - 2):
+                    success, img = cam.read()                    
+                    cv2.imshow(previewName, img)
+                    key = cv2.waitKey(20)
+                cv2.imshow("Picture", img)       #show ảnh chưa qua xử lý
                 # imgWraped = getWrap(img, biggest)       #imgWraped -> ảnh sau khi cắt
-                cv2.imwrite("filename1.jpg", imgContour) #lưu ảnh sau khi cắt
-
+                cv2.imwrite("filename1.jpg", img) #lưu ảnh sau khi cắt
+                
                 #Đọc chữ trên ảnh đã lưu
-
+                data=read_vie.khuVucHang()
+                print(data)
+                print(data["area"])
+                if data["area"]=='hai chau' or data["area"]=='cam le' or data["area"]=='thanh khe' or data["area"]=='lien chieu':
+                    datas.append(data)
+                    print("if 1")
+                    onServo_1(1)
+                    onServo_Stop(0)
+                    while True:
+                        success, img = cam.read()                    
+                        cv2.imshow(previewName, img)
+                        key = cv2.waitKey(20)
+                        if(Finished1()==0):
+                            print("break")
+                            onServo_1(0)
+                            onServo_Stop(1)
+                            break
+                elif data["area"]=='ngu hanh son' or data["area"]=='son tra' or data["area"]=='hoa vang' or data["area"]=='hoang sa':
+                    print("if 2")
+                    datas.append(data)
+                    onServo_2(1)
+                    onServo_Stop(0)
+                    while True:
+                        success, img = cam.read()                    
+                        cv2.imshow(previewName, img)
+                        key = cv2.waitKey(20)
+                        if(Finished1()==0):
+                            print("break")
+                            onServo_2(0)
+                            onServo_Stop(1)
+                            break
+                else:
+                    onServo_Stop(0)
+                    while True:
+                        success, img = cam.read()                    
+                        cv2.imshow(previewName, img)
+                        key = cv2.waitKey(20)
+                        if (Finished2()==0):
+                            onServo_Stop(1)
+                    
+                os.system('rm \'/home/pi/Desktop/PBL/Demo 12-6-2021/filename1.jpg\'')
+                
+                
+#                 if Finished()==0:
+#                     if data["area"]=='hai chau' or data["area"]=='cam le' or data["area"]=='thanh khe' or data["area"]=='lien chieu':
+#                         onServo_1(0)
+#                     elif data["area"]=='ngu hanh son' or data["area"]=='son tra' or data["area"]=='hoa vang' or data["area"]=='hoang sa':
+#                         onServo_2(0)
+#                     onServo_Stop(1)
+                
             # Nếu không thì pass
             else : pass
         #Khi không phát hiện vật cản, đặt lại giá trị vatcan thành 0
         else: vatcan = 0
 
-# >>>>>>> 1bbca717ee69806ca4eed786e31ace9fbd5be1be
-        if key == 27:  # exit on ESC
-            break
     cv2.destroyWindow(previewName)
 
 
 ############## RUN PROGRAM #####################
+onServo_Stop(1)
+onServo_1(0)
+onServo_2(0)
 thread1 = camThread("Camera", 0)
 thread1.start()
+thread2 = api()
+thread2.start()
+
+
 

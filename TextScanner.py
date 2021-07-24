@@ -2,7 +2,7 @@ import cv2
 import threading
 import numpy as np
 import math
-import read_vie
+# import read_vie
 
 # ===========================================
 # widthImg  = 960
