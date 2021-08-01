@@ -10,7 +10,7 @@ from unidecode import unidecode
 def khuVucHang():
     data={"area": "", "receiver": "", "phone": "", "price": "", "address": "", "content": ""}
     #############################Version 2#########################
-    img = cv2.imread("/home/pi/Desktop/PBL/Demo 12-6-2021/filename1.jpg")
+    img = cv2.imread("/home/pi/Desktop/PBL/PBL5_TextDetection/Demo 12-6-2021/filename1.jpg")
     rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     text = pytesseract.image_to_string(rgb, lang="vie")
 

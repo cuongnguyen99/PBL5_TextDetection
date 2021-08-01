@@ -242,6 +242,7 @@ def camPreview(previewName, camID):
                             onServo_1(0)
                             onServo_Stop(1)
                             break
+                    messenger=apiServer.send(data)
                 elif data["area"]=='ngu hanh son' or data["area"]=='son tra' or data["area"]=='hoa vang' or data["area"]=='hoang sa':
                     print("if 2")
                     datas.append(data)
@@ -256,6 +257,7 @@ def camPreview(previewName, camID):
                             onServo_2(0)
                             onServo_Stop(1)
                             break
+                    messenger=apiServer.send(data)
                 else:
                     onServo_Stop(0)
                     while True:
@@ -264,8 +266,9 @@ def camPreview(previewName, camID):
                         key = cv2.waitKey(20)
                         if (Finished2()==0):
                             onServo_Stop(1)
+                            break
                     
-                os.system('rm \'/home/pi/Desktop/PBL/Demo 12-6-2021/filename1.jpg\'')
+                os.system('rm \'/home/pi/Desktop/PBL/PBL5_TextDetection/Demo 12-6-2021/filename1.jpg\'')
                 
                 
 #                 if Finished()==0:
@@ -289,8 +292,8 @@ onServo_1(0)
 onServo_2(0)
 thread1 = camThread("Camera", 0)
 thread1.start()
-thread2 = api()
-thread2.start()
+# thread2 = api()
+# thread2.start()
 
 
 
