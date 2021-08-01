@@ -6,7 +6,7 @@ class Middleware{
     if (sess.userName!=null ){
         return next();
     }else{
-    	  res.redirect('/admin/login');
+    	  res.redirect('/login');
     }
 	};
 

@@ -16,13 +16,6 @@ export default async() => {
     modelOrder = modelOrder.default;
     db[modelOrder.tableName] = modelOrder;
 
-  // let modelProduct = await import(`./product.js`);
-  //   modelProduct = modelProduct.default;
-  //   db[modelProduct.tableName] = modelProduct;
-
-  // let modelShop = await import(`./shop.js`);
-  //   modelShop = modelShop.default;
-  //   db[modelShop.tableName] = modelShop;
 
   Object.keys(db).forEach(modelName => {
     if (db[modelName].associate) {

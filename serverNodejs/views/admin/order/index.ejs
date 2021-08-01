@@ -40,7 +40,6 @@
                           <th>Giá</th>
                           <th>Địa Chỉ</th>
                           <th>Nội Dung</th>
-                          <th style="width: 50px;"></th>
                         </tr>
                       </thead>
                         
@@ -49,27 +48,12 @@
                             <% var row = data.value[i]; %>
                             <tr>
                               <td><%= row.id %></td>
-                              <td><%= row.area %></td>
+                              <td><%= row.area[0].name %></td>
                               <td><%= row.receiver %></td>
                               <td><%= row.phone %></td>
                               <td><%= row.price %></td>
                               <td><%= row.address %></td>
                               <td><%= row.content %></td>
-
-                              <td class="d-flex">
-                                <!-- <button class="btn" type="submit">
-                                  <a data-toggle="modal" data-target="#modal-edit-game-target" onclick="loadModalUpdateData('<%= row.id %>')" href="#" title="Edit game target" class="txt-u"><i class="fas fa-edit"></i></a>
-                                </button> -->
-                                <button class="btn " type="submit">
-                                  <a  href="/admin/orders/edit/<%=row.id%>" title="Edit order"class="txt-u"><i class="fas fa-edit"></i></a>
-                                </button>
-                                
-                                <form action="/admin/orders/<%=row.id%>" method="POST">
-                                  <button class="btn btn-danger" type="submit">
-                                    <i class="fas fa-trash"></i>
-                                  </button>
-                                </form>
-                              </td>
                             </tr>
                           <% } %>
                       </tbody>

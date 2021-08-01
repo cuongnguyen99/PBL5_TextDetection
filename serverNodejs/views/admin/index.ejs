@@ -54,8 +54,8 @@
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                Số đơn hàng trong tháng</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><%=data.orderInMonth%></div>
+                                                Số đơn hàng cần xử lý</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="allOrder" ><%=data.allOrder%></div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -76,7 +76,7 @@
                                             </div>
                                             <div class="row no-gutters align-items-center">
                                                 <div class="col-auto">
-                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800"><%=data.errorOrder %></div>
+                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800" id="errorOrder"><%=data.errorOrder %></div>
                                                 </div>
                                                 <div class="col">
                                                     <div class="progress progress-sm mr-2">
@@ -103,7 +103,7 @@
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
                                                 Đơn hàng đã được xử lý</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><%=data.updatedErrorOrder%></div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="processedItem"><%=data.updatedErrorOrder%></div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-comments fa-2x text-gray-300"></i>
@@ -167,10 +167,17 @@
                                          } -->
                                         <% for(var element in dataAreaMonth) {  %>
                                         <input id="<%=element.replace(' ', ''); %>" value="<%=dataAreaMonth[element]%>" hidden/>
-                                        <span class="mr-2">
-                                            <i " class="fas fa-circle " style="color: <%=data.arrayColor[i] %>;"></i><%=element %> - <%=dataAreaMonth[element] %> Đơn   
-                                        </span>
+                                        
                                         <% i++;}%>
+                                        <span class="mr-2">
+                                            <i " class="fas fa-circle " style="color: <%=data.arrayColor[7] %>;"></i> Đơn hàng lỗi  
+                                        </span>
+                                        <span class="mr-2">
+                                            <i " class="fas fa-circle " style="color: <%=data.arrayColor[8] %>;"></i> Đơn hàng đã xử lý
+                                        </span>
+                                        <span class="mr-2">
+                                            <i " class="fas fa-circle " style="color: <%=data.arrayColor[9] %>;"></i> Đơn hàng còn lại   
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -218,15 +225,21 @@
         
         let labelArea = []
         // Pie Chart Example
+        let errorItem =  document.getElementById('errorOrder').textContent;
+        let processedItem = document.getElementById('processedItem').textContent;
+        let allOrder = document.getElementById('allOrder').textContent;
+        errorItem = errorItem / allOrder * 100;
+        processedItem =processedItem / allOrder * 100
+
         var ctx = document.getElementById("myPieChart");
         var myPieChart = new Chart(ctx, {
         type: 'doughnut',
         data: {
-            labels: arrayArea,
+            labels: ["Đơn hàng lỗi", "Đơn hàng đã xử lý", "Đơn hàng còn lại"],
             datasets: [{
-            data: centerDataMonth,
-            backgroundColor: arrayColor.slice(0, arrayArea.length),
-            hoverBackgroundColor: arrayColor.slice(0, arrayArea.length),
+            data: [errorItem,processedItem, 100 - errorItem - processedItem],
+            backgroundColor: arrayColor.slice(7, 10),
+            hoverBackgroundColor: arrayColor.slice(7, 10),
             hoverBorderColor: "rgba(234, 236, 244, 1)",
             }],
         },
