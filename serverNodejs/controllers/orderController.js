@@ -17,20 +17,20 @@ class OrderController {
 
       if(req.query.search) {
         order = await this.db.order.findAndCountAll({
+          distinct:true,
+          limit: limit,
+          offset: offset,
           where: {
             [this.db.Op.or]: [
-              { receiver: req.query.search },
-              { phone: req.query.search },
-              { address: req.query.search }
+              { receiver:  { [this.db.Op.like] : '%' + req.query.search + '%' } },
+              { phone:  { [this.db.Op.like] : '%' + req.query.search + '%' } },
+              { address:  { [this.db.Op.like] : '%' + req.query.search + '%' } },
             ]
           },
           include:{
-            models: this.db.area,
+            model: this.db.area,
             as: "area"
-          },
-          distinct:true,
-          limit: limit,
-          offset: offset
+          }
         })
 
 

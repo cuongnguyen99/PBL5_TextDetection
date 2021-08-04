@@ -12,11 +12,11 @@ export default ({db}) =>{
 	router.get('/login', Middleware.checkLogin , (req,res)=>adminController.loginform(req,res));
 	router.post('/login', Middleware.checkLogin ,(req,res)=>adminController.login(req,res));
 	router.post('/logout' , (req,res)=>adminController.logout(req,res));
-	router.get('/' , (req,res)=>adminController.dashboard(req,res));
+	router.get('/',Middleware.isLoggedIn , (req,res)=>adminController.dashboard(req,res));
 
 	// order
-	router.get('/orders', (req,res)=>orderController.index(req,res));
-	router.get('/orders/processed-items', (req,res)=>orderController.processedItems(req,res));
+	router.get('/orders',Middleware.isLoggedIn , (req,res)=>orderController.index(req,res));
+	router.get('/orders/processed-items',Middleware.isLoggedIn, (req,res)=>orderController.processedItems(req,res));
 
 	
 	return router;

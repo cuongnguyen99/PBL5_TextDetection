@@ -31,14 +31,14 @@ class AdminController{
             const roles='admin';
             await this.addSession(req , res , req.body.username, roles);
             var data = [{ userId: admin.id}, { userName: admin.phone}, {roles: roles }, { expiredAt: Math.floor(Date.now() / 1000) + (60 * 60)}]
-            return res.redirect('/admin',res,req);
+            return res.redirect('/',res,req);
 			  }else{
-			   	return res.redirect('/admin/login');
+			   	return res.redirect('/login');
 			  }
 			}
-      return res.redirect('/admin/login');
+      return res.redirect('/login');
 		}else{
-		  return res.redirect('/admin/login');
+		  return res.redirect('/login');
 		}
 	};
 
