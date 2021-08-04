@@ -12,6 +12,8 @@
 	Học code chi nhiều cho mệt. nghỉ ngơi đi
 
 #Cường
+* Install unidecode : https://gist.github.com/thuandt/3421905?fbclid=IwAR2TTRuHQSdr1jqRA49raOQw94JhvKWj2gkr2CLrCcI1atPBEZofr4FZc1g
+* run project : file all.py (Demo 12-6-2021)
 
 #Phúc
 
