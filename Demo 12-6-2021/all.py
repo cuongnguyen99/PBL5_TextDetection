@@ -230,7 +230,7 @@ def camPreview(previewName, camID):
                 print(data["area"])
                 if data["area"]=='hai chau' or data["area"]=='cam le' or data["area"]=='thanh khe' or data["area"]=='lien chieu':
                     datas.append(data)
-                    print("if 1")
+#                     print("if 1")
                     onServo_1(1)
                     onServo_Stop(0)
                     while True:
@@ -238,13 +238,13 @@ def camPreview(previewName, camID):
                         cv2.imshow(previewName, img)
                         key = cv2.waitKey(20)
                         if(Finished1()==0):
-                            print("break")
+#                             print("break")
                             onServo_1(0)
                             onServo_Stop(1)
                             break
                     messenger=apiServer.send(data)
                 elif data["area"]=='ngu hanh son' or data["area"]=='son tra' or data["area"]=='hoa vang' or data["area"]=='hoang sa':
-                    print("if 2")
+#                     print("if 2")
                     datas.append(data)
                     onServo_2(1)
                     onServo_Stop(0)
@@ -253,7 +253,7 @@ def camPreview(previewName, camID):
                         cv2.imshow(previewName, img)
                         key = cv2.waitKey(20)
                         if(Finished1()==0):
-                            print("break")
+#                             print("break")
                             onServo_2(0)
                             onServo_Stop(1)
                             break

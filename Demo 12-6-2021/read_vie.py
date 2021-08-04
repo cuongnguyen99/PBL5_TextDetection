@@ -26,7 +26,7 @@ def khuVucHang():
     text=text.lower()
     text= text.replace("\n", " ")
     text= unidecode(text)
-    print(text)
+#     print(text)
 
     textSplit= text.split("nguoi nhan:")
     if len(textSplit) > 1 :
@@ -62,6 +62,42 @@ def khuVucHang():
             if text.find(x) != -1:
                 data["area"]= x
                 break
+        textSplit2= text.split("dia chi")
+        if len(textSplit2) > 2 :
+            txt= textSplit2[2]
+            diaChi=1
+            dienThoai=txt.find("dien thoai")
+            noiDung=txt.find("noi dung")
+            tienThuHo=txt.find("tien thu ho")
+            trongLuong=txt.find("trong luong")
+            if dienThoai!=-1:
+                data["address"]=txt[diaChi:dienThoai].strip()
+            if dienThoai!=-1 and noiDung != -1:
+                dienThoai=dienThoai+11
+                data["phone"]=txt[dienThoai:noiDung].strip()
+            if noiDung!=-1 and tienThuHo != -1:
+                noiDung=noiDung+9
+                data["content"]=txt[noiDung:tienThuHo].strip()
+            if tienThuHo!=-1 and trongLuong != -1:
+                tienThuHo=tienThuHo+12
+                data["price"]=txt[tienThuHo:trongLuong].strip()
+        else:
+            textSplit3= text.split("dien thoai")
+            if len(textSplit3) > 2 :
+                txt= textSplit3[2]
+                dienThoai=1
+                noiDung=txt.find("noi dung")
+                tienThuHo=txt.find("tien thu ho")
+                trongLuong=txt.find("trong luong")
+                if noiDung != -1:
+                    data["phone"]=txt[dienThoai:noiDung].strip()
+                if noiDung!=-1 and tienThuHo != -1:
+                    noiDung=noiDung+9
+                    data["content"]=txt[noiDung:tienThuHo].strip()
+                if tienThuHo!=-1 and trongLuong != -1:
+                    tienThuHo=tienThuHo+12
+                    data["price"]=txt[tienThuHo:trongLuong].strip()
+#                 
     print(data)
     return data
     
