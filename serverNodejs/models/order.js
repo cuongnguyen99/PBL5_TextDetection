@@ -29,7 +29,7 @@ const order = sequelize.define('order', {
   	// }
   },
   price: {
-    type: Sequelize.DECIMAL(25, 1),
+    type: Sequelize.STRING,
     // allowNull: false
   },
   address: {
@@ -94,20 +94,5 @@ order.associate = function(models) {
   });
 };
 
-// order.associate = function(models) {
-//   order.belongsToMany(models.product, {
-//     through: "product_order",
-//     as: "product",
-//     foreignKey: "order_id",
-//   });
-// };
-
-// order.associate = function(models) {
-//   order.belongsTo(models.users);
-// };
-
-// order.associate = function(models) {
-//   order.belongsTo(models.shop);
-// };
 
 export default order;

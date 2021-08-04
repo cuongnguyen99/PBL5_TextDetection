@@ -48,7 +48,7 @@
                             <% var row = data.value[i]; %>
                             <tr>
                               <td><%= row.id %></td>
-                              <td><%= row.area[0].name %></td>
+                              <td><%= row.area[0]? row.area[0].name : '' %></td>
                               <td><%= row.receiver %></td>
                               <td><%= row.phone %></td>
                               <td><%= row.price %></td>

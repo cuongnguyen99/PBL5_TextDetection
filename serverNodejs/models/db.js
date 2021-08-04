@@ -13,6 +13,6 @@ const connectionOptions = {
     timestamps: true
   }
 };
-const sequelize = new Sequelize('doanki2', 'root', 'admin123', connectionOptions);
+const sequelize = new Sequelize('doanki2', 'root', 'adminPhuc@123', connectionOptions);
 
 export default sequelize; 

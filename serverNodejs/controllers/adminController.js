@@ -93,15 +93,16 @@ class AdminController{
 		})
 
 		let allAreaInMonth = await this.db.area.findAll({
-			
+			group: ['name'],
 			include: [{
-					model: this.db.order, 
-					as:"order",
-					where: [ 
-						await this.db.Sequelize.where(await this.db.Sequelize.fn('MONTH', await this.db.Sequelize.col('order.created_at')), month),
-						await this.db.Sequelize.where(await this.db.Sequelize.fn('YEAR', await this.db.Sequelize.col('order.created_at')), year)
-					]
+				model: this.db.order, 
+				as:"order",
+				where: [ 
+					await this.db.Sequelize.where(await this.db.Sequelize.fn('MONTH', await this.db.Sequelize.col('order.created_at')), month),
+					await this.db.Sequelize.where(await this.db.Sequelize.fn('YEAR', await this.db.Sequelize.col('order.created_at')), year)
+				]
 			}],
+			attributes: ['name', [this.db.Sequelize.fn('COUNT', this.db.Sequelize.col('order.id')),'num']],
 			// attributes: [
       //   'name', [await this.db.Sequelize.fn("COUNT", await this.db.Sequelize.col("order_id")), "total"] 
 			// ],
@@ -125,19 +126,16 @@ class AdminController{
 		let totalMonth = null;
 		let JsondataMonth = {}
 		allAreaInMonth.forEach(element => {
-			totalMonth += element.order.length;
-			JsondataMonth[element.name]= element.order.length;
+			totalMonth += element.dataValues.num;
+			JsondataMonth[element.name]=element.dataValues.num;
 			arrayAreaMonth.push(element.name);
 		});
 
 		
-
 		let arrayAreaDay = [];
 		let totalDay = null;
 		let JsondataDay = {}
 		allAreaInDay.forEach(element => {
-			console.log("day")
-			console.log(element.order.length);
 			totalDay += element.order.length;
 			JsondataDay[element.name]= element.order.length;
 			arrayAreaDay.push(element.name);
