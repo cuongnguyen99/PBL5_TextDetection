@@ -32,8 +32,6 @@ class OrderController {
             as: "area"
           }
         })
-
-
       } else {
         order = await this.db.order.findAndCountAll({
           include:{
@@ -45,27 +43,19 @@ class OrderController {
           offset: offset,
         });
       }
-      order.rows.forEach(element => {
-        console.log(element.area[0])
-      });
-    //  console.log(order)
-      
       order = await queryOption.getPagingData(order, page-1, limit);
-      
-      res.render("admin/order/index", { data: order , notify: null});
-      
+      res.render("admin/order/index", { data: order});
     } catch (error) {
       console.log(error)
     }
-   
   };
 
   async processedItems(req, res) {
     try {
       let order = null;
-      
-      res.locals.user = req.session.userName;
 
+      res.locals.user = req.session.userName;
+      
       const { page, size } = req.query;
       const { limit, offset } = await queryOption.getPagination(page-1, size);
 
@@ -76,18 +66,31 @@ class OrderController {
               { receiver: req.query.search },
               { phone: req.query.search },
               { address: req.query.search }
-            ]
+            ],
+            [this.db.Op.or]: [
+              { status: 1 },
+              { status: 2 },
+            ],
+          },
+          include:{
+            model: this.db.area,
+            as: "area"
           },
           distinct:true,
           limit: limit,
           offset: offset
         })
-
-
       } else {
         order = await this.db.order.findAndCountAll({
           where: {
-            status: 2
+            [this.db.Op.or]: [
+              { status: 1 },
+              { status: 2 },
+            ],
+          },
+          include:{
+            model: this.db.area,
+            as: "area"
           },
           distinct:true,
           limit: limit,
@@ -97,7 +100,7 @@ class OrderController {
       
       order = await queryOption.getPagingData(order, page-1, limit);
       
-      res.render("admin/order/index", { data: order , notify: null});
+      res.render("admin/order/index", { data: order});
     } catch (error) {
       console.log(error)
     }
