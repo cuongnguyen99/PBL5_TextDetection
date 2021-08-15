@@ -55,9 +55,17 @@
                               <td><%= row.price %></td>
                               <td><%= row.address %></td>
                               <td><%= row.content %></td>
-                              <td class="<%= row.status == 2 ? 'text-success' : 'text-danger'%>"
-                                
-                              ><%= row.status == 1 ? 'Lỗi' : 'Thành công' %></td>
+                              <% if(row.status == 0){ %>
+                                <td>
+                                  Chưa xử lý
+                                </td>
+                              <% } else { %>
+                                <td class="<%= row.status == 1 ? 'text-danger' : 'text-success' %>">
+                                  <%= row.status == 1 ? 'Lỗi' : 'Thành công' %>
+                                </td>
+                              <% } %> 
+
+                             
                             </tr>
                           <% } %>
                       </tbody>

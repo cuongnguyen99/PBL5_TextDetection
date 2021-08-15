@@ -27,7 +27,7 @@ class apisOrderController {
 
 			if(!params.area || !params.receiver || !params.phone || !params.price || !params.address) {
         
-        const errorData = await this.db.order.create({
+        await this.db.order.create({
           receiver: params.receiver,
           phone: params.phone,
           price: params.price,
