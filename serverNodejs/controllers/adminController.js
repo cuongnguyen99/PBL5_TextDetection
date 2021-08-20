@@ -64,12 +64,11 @@ class AdminController{
 
 		const Op = this.db.Op;
 
-		let OrderInDay=await this.db.order.count({
+		let OrderInDay = await this.db.order.count({
 			where: await this.db.Sequelize.where(await this.db.Sequelize.fn('DATE', await this.db.Sequelize.col('created_at')), data)
     })
 
-		let OrderInMonth=await this.db.order.count({
-     
+		let OrderInMonth = await this.db.order.count({
 			where: [ 
 				await this.db.Sequelize.where(await this.db.Sequelize.fn('MONTH', await this.db.Sequelize.col('created_at')), month),
 				await this.db.Sequelize.where(await this.db.Sequelize.fn('YEAR', await this.db.Sequelize.col('created_at')), year)
@@ -103,9 +102,6 @@ class AdminController{
 				]
 			}],
 			attributes: ['name', [this.db.Sequelize.fn('COUNT', this.db.Sequelize.col('order.id')),'num']],
-			// attributes: [
-      //   'name', [await this.db.Sequelize.fn("COUNT", await this.db.Sequelize.col("order_id")), "total"] 
-			// ],
 		})
 
 		let allAreaInDay = await this.db.area.findAll({
@@ -117,9 +113,6 @@ class AdminController{
 						await this.db.Sequelize.where(await this.db.Sequelize.fn('DATE', await this.db.Sequelize.col('order.created_at')), data)
 					]
 			}],
-			// attributes: [
-      //   'name', [await this.db.Sequelize.fn("COUNT", await this.db.Sequelize.col("order_id")), "total"] 
-			// ],
 		})
 
 		let arrayAreaMonth = [];
