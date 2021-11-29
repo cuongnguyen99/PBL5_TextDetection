@@ -9,7 +9,9 @@
 		https://www.youtube.com/watch?v=JkzFjj2hjtw
 
 #Hoàng
-	Học code chi nhiều cho mệt. nghỉ ngơi đi
+* Because Tesseract only detect the text at a certain angle, use Detect corners of the package, then align the package to the right angle.
+* Somehow the model can not upload on github so I upload it on drive
+* https://drive.google.com/drive/folders/1SxuBtjnOlrw2f86C5kGL2Y4keVVZrWoF?usp=sharing
 
 #Cường
 * Install unidecode : https://gist.github.com/thuandt/3421905?fbclid=IwAR2TTRuHQSdr1jqRA49raOQw94JhvKWj2gkr2CLrCcI1atPBEZofr4FZc1g
